@@ -12,8 +12,8 @@ A Next.js web application that finds restaurants by UK postcode using the Just E
 ### Installation
 
 ```bash
-git clone <repository-url>
-cd jet_interface
+git clone https://github.com/sinanoonen/just-eat-restaurant-finder.git
+cd just-eat-restaurant-finder
 npm install
 ```
 
