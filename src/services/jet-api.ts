@@ -1,3 +1,9 @@
+/**
+ * Fetches restaurant data from the Just Eat API based on the provided postcode.
+ * @param postCode The postcode to search for restaurants.
+ * @returns A promise that resolves to the raw data returned by the Just Eat API.
+ * @throws An error if the fetch operation fails or if the response is not OK.
+ */
 export async function fetchRestaurantsByPostCode(
   postCode: string,
 ): Promise<unknown> {

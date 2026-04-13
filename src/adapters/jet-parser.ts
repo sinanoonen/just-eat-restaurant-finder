@@ -58,6 +58,11 @@ function parseSingleRestaurant(raw: RawRestaurant): Restaurant | null {
   };
 }
 
+/**
+ * Parses raw data from the Jet API into an array of Restaurant objects.
+ * @param raw The raw data to parse, expected to be an object with a "restaurants" array.
+ * @returns An array of Restaurant objects. If the input is invalid, returns an empty array.
+ */
 export function parseRestaurants(raw: unknown): Restaurant[] {
   if (typeof raw !== "object" || raw === null) return [];
   const response = raw as RawJetResponse;

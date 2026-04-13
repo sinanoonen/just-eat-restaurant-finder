@@ -25,6 +25,12 @@ const SUGGESTED_POSTCODES = [
 
 const UK_POSTCODE_REGEX = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
 
+/**
+ * Main page component for the Restaurant Finder application.
+ * Provides a search interface for users to find restaurants based on UK postcodes.
+ * Displays a list of restaurants or error messages based on the search results.
+ * @returns A React component representing the main page of the application.
+ */ 
 export default function Home() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [postcode, setPostcode] = useState("");
