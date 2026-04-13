@@ -23,6 +23,8 @@ const SUGGESTED_POSTCODES = [
   "BT7 1NN",
 ];
 
+const UK_POSTCODE_REGEX = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+
 export default function Home() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [postcode, setPostcode] = useState("");
@@ -31,8 +33,17 @@ export default function Home() {
   const [currentPostcode, setCurrentPostcode] = useState<string | null>(null);
 
   async function handleSearch(searchPostcode: string) {
-    if (!searchPostcode.trim()) {
+    const trimmed = searchPostcode.trim();
+
+    if (!trimmed) {
       setError("Please enter a postcode.");
+      return;
+    }
+
+    if (!UK_POSTCODE_REGEX.test(trimmed)) {
+      setError("Please enter a valid UK postcode (e.g. SW1A 1AA).");
+      setCurrentPostcode(null);
+      setRestaurants([]);
       return;
     }
     setLoading(true);
@@ -40,14 +51,14 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        `/api/restaurants?postcode=${encodeURIComponent(searchPostcode.trim())}`,
+        `/api/restaurants?postcode=${encodeURIComponent(trimmed)}`,
       );
       if (!response.ok) {
         throw new Error("Failed to fetch restaurants");
       }
       const data = await response.json();
       setRestaurants(data.restaurants);
-      setCurrentPostcode(searchPostcode.trim().toUpperCase());
+      setCurrentPostcode(trimmed.toUpperCase());
     } catch (err) {
       setError("Something went wrong. Please try again.");
       setRestaurants([]);
@@ -58,11 +69,16 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 bg-white border-b border-gray-200 z-10 py-4">
+      <header className="sticky top-0 bg-orange-400 z-10 py-5 shadow-md">
         <div className="max-w-6xl mx-auto px-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Restaurant Finder
-          </h1>
+          <div className="mb-5">
+            <h1 className="text-3xl font-bold text-white tracking-tight">
+              Restaurant Finder
+            </h1>
+            <p className="text-sm text-white/80 italic mt-0.5">
+              Discover places to eat near you
+            </p>
+          </div>
 
           <form
             onSubmit={(e) => {
@@ -76,11 +92,11 @@ export default function Home() {
               value={postcode}
               onChange={(e) => setPostcode(e.target.value)}
               placeholder="Enter a UK postcode"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-md"
+              className="flex-1 px-4 py-2 bg-white rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-300"
             />
             <button
               type="submit"
-              className="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+              className="px-6 py-2 bg-white text-orange-400 font-semibold rounded-md hover:bg-orange-50"
             >
               Search
             </button>
@@ -91,7 +107,7 @@ export default function Home() {
               <button
                 key={pc}
                 onClick={() => handleSearch(pc)}
-                className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-full"
+                className="px-3 py-1 text-sm bg-white/20 hover:bg-white/30 text-white rounded-full transition-colors"
               >
                 {pc}
               </button>
@@ -99,9 +115,11 @@ export default function Home() {
           </div>
 
           {currentPostcode && (
-            <p className="mt-3 text-sm text-gray-600">
+            <p className="mt-3 text-sm text-orange-50">
               Showing results for{" "}
-              <span className="font-semibold">{currentPostcode}</span>
+              <span className="font-semibold text-white">
+                {currentPostcode}
+              </span>
             </p>
           )}
         </div>
