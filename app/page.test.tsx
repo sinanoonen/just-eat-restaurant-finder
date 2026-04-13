@@ -42,7 +42,7 @@ describe("Home page", () => {
     });
 
     expect(screen.getByText(/Italian/)).toBeInTheDocument();
-    expect(screen.getByText("★ 4.5")).toBeInTheDocument();
+    expect(screen.getByText("4.5")).toBeInTheDocument();
   });
 
   it("shows an error message on failed search", async () => {
